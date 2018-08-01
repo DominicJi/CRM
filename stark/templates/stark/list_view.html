@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+
+{% block page-body %}
+    <div class="row">
+        <div class="page-header">
+            <h1>数据展示</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8">
+            <a href="{{ add_url }}">
+                <button class="btn btn-success pull-left">新增</button>
+            </a>
+            {% if show_obj.config_obj.search_fields %}
+                <form class="form-inline pull-right" style="margin: 10px 0">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="exampleInputAmount"
+                                   placeholder={% if key_word %}
+                                       {{ key_word }}
+                                   {% else %}
+                                       "关键字"
+                                   {% endif %}
+                                   name="key_word">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">查询</button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <form action="" class="form-inline" method="post">
+                {% csrf_token %}
+                <select class="form-control" style="width: 20%;margin: 5px 0;" name="func_name">
+                    <option>------------------</option>
+                    {% for action in show_obj.get_action %}
+                        <option value="{{ action.name }}">{{ action.desc }}</option>
+                    {% endfor %}
+                </select>
+                <input type="submit" value="action" class="btn btn-info">
+                <table class="table-bordered table table-hover table-striped">
+                    <thead>
+                    <tr>
+                        {% for head in show_obj.get_head_list %}
+                            <th>{{ head }}</th>
+                        {% endfor %}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for data in show_obj.get_body_list %}
+                        <tr>
+                            {% for foo in data %}
+                                <td>{{ foo }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </form>
+            <div class="row">
+                <div class="col-md-10 col-lg-offset-1">
+                    {{ show_obj.pagination.page_html|safe }}
+                </div>
+            </div>
+        </div>
+        {% if show_obj.config_obj.list_filter %}
+            <div class="col-md-4">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title text-center">filter</h3>
+                    </div>
+                    <div class="panel-body">
+                        {% for key,val in show_obj.get_filter_links.items %}
+                            <div class="panel panel-default">
+                                <div class="panel-heading">By {{ key|upper }}</div>
+                                <div class="panel-body">
+                                    {% for link in val %}
+                                        <p>{{ link|safe }}</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+    </div>
+
+{% endblock %}

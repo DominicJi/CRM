@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block page-body %}
+
+        <div class="row">
+            <div class="page-header">
+                <h1>添加页面</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-10 col-lg-offset-1">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Panel title</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-8 col-lg-offset-1">
+                                <form action="" method="post" novalidate>
+                            {% csrf_token %}
+                            {% for form in form_list %}
+                                <p class="father"><label for="{{ form.id_for_label }}">{{ form.label }}</label>
+                                    {{ form }}
+                                    <span>{{ form.errors.0 }}</span>
+                                {% if form.is_pop %}
+                                <span class="glyphicon glyphicon-plus son" style="color: green" id="plus" onclick="foo('{{ form.url }}')"></span>
+                                {% endif %}
+                                </p>
+                            {% endfor %}
+                            <input type="submit" value="提交" class="btn btn-success">
+                        </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+{% endblock %}
+
+{% block page-js %}
+    <script>
+            function foo(url){
+                window.open(url,'','width=800px,height=600px,left=300px top=100px');
+            }
+            function show_option(pop_back_id,pk,text) {
+                var option=document.createElement('option');
+                option.innerHTML=text;
+                option.value=pk;
+                option.selected='selected';
+                select=document.getElementById(pop_back_id);
+                select.appendChild(option);
+            }
+
+    </script>
+
+
+
+
+{% endblock %}

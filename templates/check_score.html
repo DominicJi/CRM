@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block page-body %}
+    <h3>查看{{ student_obj }}成绩</h3>
+    <table class="table table-bordered table-hover table-striped">
+        <thead>
+        <tr>
+            <th>编号</th>
+            <th>班级</th>
+            <th>班主任</th>
+            <th>查看个人成绩</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for class_obj in class_list %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ class_obj }}</td>
+                <td>{{ class_obj.tutor }}</td>
+                <td><a href="javascript:void(0)" class="chart" cid="{{ class_obj.pk }}">成绩柱状图</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <div id="container" style="min-width:400px;height:400px"></div>
+    <script src="https://cdn.hcharts.cn/highcharts/highcharts.js"></script>
+    <script>
+        $('.chart').click(function () {
+            var sid = '{{ student_obj.pk }}';
+            var cid = $(this).attr('cid');
+            $.ajax({
+                url: '',
+                type: 'get',
+                data: {
+                    sid: sid,
+                    cid: cid
+                },
+                success: function (data) {
+                    var chart = Highcharts.chart('container', {
+                        chart: {
+                            type: 'column'
+                        },
+                        title: {
+                            text: '个人成绩柱状图'
+                        },
+                        xAxis: {
+                            type: 'category',
+                            labels: {
+                                rotation: -45  // 设置轴标签旋转角度
+                            }
+                        },
+                        yAxis: {
+                            min: 0,
+                            title: {
+                                text: '分数'
+                            }
+                        },
+                        legend: {
+                            enabled: false
+                        },
+                        tooltip: {
+                            pointFormat: '<b>{point.y:.1f} 分</b>'
+                        },
+                        series: [{
+                            name: '分数',
+                            data: data,
+                            dataLabels: {
+                                enabled: true,
+                                rotation: -90,
+                                color: '#FFFFFF',
+                                align: 'right',
+                                format: '{point.y:.1f}', // :.1f 为保留 1 位小数
+                                y: 10
+                            }
+                        }]
+                    });
+                }
+            })
+        });
+
+
+    </script>
+
+
+{% endblock %}

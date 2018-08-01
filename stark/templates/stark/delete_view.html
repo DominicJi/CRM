@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block page-body %}
+
+    <div class="row">
+            <div class="page-header">
+                <h1>删除页面</h1>
+            </div>
+        </div>
+    <div class="row">
+        <div class="col-md-10 col-lg-offset-1">
+        <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title">删除</h3>
+      </div>
+      <div class="panel-body">
+        <form action="" method="post" novalidate>
+    {% csrf_token %}
+    {% for form in form_list %}
+        <p><label for="{{ form.id_for_label }}">{{ form.label }}</label>
+        {{ form }}
+        <span>{{ form.errors.0 }}</span>
+        </p>
+    {% endfor %}
+        <input type="submit" class="btn btn-danger" value="确认删除">
+        <button class="btn btn-primary"><a href="{{ add_url }}" style="color: white">取消删除</a></button>
+    </form>
+      </div>
+    </div>
+
+
+
+
+
+
+        </div>
+    </div>
+
+{% endblock %}
+
+
